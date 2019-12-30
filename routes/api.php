@@ -31,7 +31,7 @@ Route::post('contact/store', function (Request $request) {
 });
 
 Route::patch('contact/{id}', function (Request $request, $id) {
-  return Contact::findOrFail($id)->update([
+  Contact::findOrFail($id)->update([
     'name' => $request->input('name'),
     'email' => $request->input('email'),
     'phone' => $request->input('phone'),
