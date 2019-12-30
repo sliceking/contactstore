@@ -14,15 +14,15 @@ use App\Models\Contact;
 |
 */
 
-Route::get('contacts', function() {
+Route::get('contacts', function () {
   return Contact::latest()->orderBy('created_at', 'desc')->get();
 });
 
-Route::get('contact/{id}', function($id) {
+Route::get('contact/{id}', function ($id) {
   return Contact::findOrFail($id);
 });
 
-Route::post('contact/store', function(Request $request) {
+Route::post('contact/store', function (Request $request) {
   return Contact::create([
     'name' => $request->input('name'),
     'email' => $request->input('email'),
@@ -30,7 +30,7 @@ Route::post('contact/store', function(Request $request) {
   ]);
 });
 
-Route::patch('contact/{id}', function(Request $request, $id) {
+Route::patch('contact/{id}', function (Request $request, $id) {
   return Contact::findOrFail($id)->update([
     'name' => $request->input('name'),
     'email' => $request->input('email'),
@@ -38,10 +38,10 @@ Route::patch('contact/{id}', function(Request $request, $id) {
   ]);
 });
 
-Route::delete('contact/{id}', function($id) {
+Route::delete('contact/{id}', function ($id) {
   return Contact::destroy($id);
 });
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+  return $request->user();
 });
