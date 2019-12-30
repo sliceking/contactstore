@@ -18,14 +18,13 @@
       <button v-show="edit" type="submit" class="btn btn-primary">Update Contact</button>
     </form>
   </div>
-
 </template>
 
 <script>
   export default {
     data: function () {
       return {
-        edit: true,
+        edit: false,
         list: [],
         contact: {
           id: '',
@@ -37,10 +36,35 @@
     },
     mounted: function () {
       console.log('contacts component loaded');
+      this.fetchContactList();
     },
     methods: {
+      fetchContactList: function () {
+        console.log('fetching contacts');
+        axios.get('api/contacts')
+          .then((response) => {
+            console.log(response.data);
+            this.list = response.data;
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      },
       createContact: function () {
         console.log('creating contact');
+        let self = this;
+        let params = Object.assign({}, self.contact);
+        axios.post('/api/contact/store', params)
+          .then(function () {
+            self.contact.name = '';
+            self.contact.email = '';
+            self.contact.phone = '';
+            self.edit = false;
+            self.fetchContactList();
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
         return;
       },
       updateContact: function (id) {

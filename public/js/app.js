@@ -1860,11 +1860,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      edit: true,
+      edit: false,
       list: [],
       contact: {
         id: '',
@@ -1876,10 +1875,33 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     console.log('contacts component loaded');
+    this.fetchContactList();
   },
   methods: {
+    fetchContactList: function fetchContactList() {
+      var _this = this;
+
+      console.log('fetching contacts');
+      axios.get('api/contacts').then(function (response) {
+        console.log(response.data);
+        _this.list = response.data;
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    },
     createContact: function createContact() {
       console.log('creating contact');
+      var self = this;
+      var params = Object.assign({}, self.contact);
+      axios.post('/api/contact/store', params).then(function () {
+        self.contact.name = '';
+        self.contact.email = '';
+        self.contact.phone = '';
+        self.edit = false;
+        self.fetchContactList();
+      })["catch"](function (error) {
+        console.log(error);
+      });
       return;
     },
     updateContact: function updateContact(id) {
@@ -49601,6 +49623,8 @@ window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.
  */
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
+
+var axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 
 Vue.component('contacts', __webpack_require__(/*! ./components/Contacts.vue */ "./resources/js/components/Contacts.vue")["default"]);
 /**
